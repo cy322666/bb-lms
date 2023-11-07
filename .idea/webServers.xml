@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4729155a-862c-472e-9111-85f4238e74d6" name="bb-lms">
+        <fileTransfer accessType="SFTP" host="81.163.27.155" port="22" sshConfigId="d61cf042-cdfd-4f7d-bb32-1dc9b8367ea3" sshConfig="bb-lms" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
