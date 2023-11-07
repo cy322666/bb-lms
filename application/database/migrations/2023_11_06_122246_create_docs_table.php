@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('uuid')->nullable();
-            $table->integer('contact_id')->nullable();
             $table->integer('account_id')->nullable();
             $table->integer('subdomain')->nullable();
             $table->boolean('is_agreement')->default(false);
