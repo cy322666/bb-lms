@@ -23,7 +23,7 @@ class Client
     /**
      * @throws Exception
      */
-    public function __construct(Account $account)
+    public function __construct($account)
     {
         $this->user = $account->user;
 

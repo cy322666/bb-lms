@@ -7,7 +7,7 @@ use CooperAV\SmsAero\SmsAero;
 
 class SmsHelper
 {
-    public static function matchClient(Account $account): SmsAero|TargetSMS
+    public static function matchClient($account): SmsAero|TargetSMS
     {
         $access = static::getClient($account->subdomain);
 
@@ -52,7 +52,7 @@ class SmsHelper
     {
         if ($subdomain == 'fashionfactoryschool') {
 
-            $client->send($phone, $sms, 'DIRECT');
+            return $client->send($phone, $sms, 'DIRECT');
         }
 
         if ($subdomain == 'bbeducation') {

@@ -19,10 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('doc/sms/agreement/{accounts:subdomain}', [DocController::class, 'agreement']);
+Route::post('doc/sms/agreement/{account:subdomain}', [DocController::class, 'agreement']);
 
-Route::post('doc/lead/info/{accounts:subdomain}', [DocController::class, 'info']);
+Route::post('doc/lead/info/{account:subdomain}', [DocController::class, 'info']);
 
-Route::post('doc/sms/check/{accounts:subdomain}', [DocController::class, 'check']);
+Route::post('doc/sms/check/{account:subdomain}', [DocController::class, 'check']);
 
 

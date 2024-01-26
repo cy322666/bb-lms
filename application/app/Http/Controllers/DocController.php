@@ -9,6 +9,7 @@ use App\Services\SmsHelper;
 use App\Services\TargetSMS;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
 class DocController extends Controller
@@ -18,48 +19,21 @@ class DocController extends Controller
      */
     public function agreement(Account $account, Request $request)
     {
-        try {
-            Log::info(__METHOD__, $request->toArray());
+        Log::info(__METHOD__, $request->toArray());
 
-            $setting = $account->docSetting;
+        $doc = $account->doc()->create([
+//            'id_sms'  => $idSms,
+//            'status'  => $status,
+//            'phone'   => $phone,
+            'lead_id' => $request->toArray()['leads']['status'][0]['id'],
+//            'contact_id' => $contact->id,
+//            'send_code'  => $code,
+        ]);
 
-            $smsClient = SmsHelper::matchClient($account);
-
-            $amoApi = (new Client($account))->init();
-
-            $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
-
-            $contact = $lead->contact;
-
-            $phone = $contact->cf('Телефон')->getValue();
-
-            $text = SmsHelper::getText($account->subdomain, $lead);
-
-            $code = SmsHelper::generateCode();
-
-            $response = SmsHelper::send($account->subdomain, $smsClient, $phone, $text);
-
-            $account->doc()->create([
-                'id_sms'  => $idSms,
-                'status'  => $status,
-                'phone'   => $phone,
-                'lead_id' => $lead->id,
-                'contact_id' => $contact->id,
-                'send_code'  => $code,
-            ]);
-
-            Notes::addOne($lead, $text);
-
-            $lead->status_id = $setting->status_id_confirm;//59740474; //код отправлен //
-            $lead->cf('Договор. Код')->setValue($code);
-            $lead->save();
-
-        } catch (\Throwable $e) {
-
-            Log::error(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getFile());
-
-            Notes::addOne($lead, 'При отправке или обработке смс возникла ошибка');
-        }
+        Artisan::call('app:sms-send', [
+            'account' => $account,
+            'doc' => $doc,
+        ]);
     }
 
     //update new info to doc (lead)
