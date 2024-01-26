@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Core;
+namespace App\Models;
 
 use App\Models\Doc;
 use App\Models\DocSetting;

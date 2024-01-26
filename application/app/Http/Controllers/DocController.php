@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Core\Account;
+use App\Models\Account;
 use App\Services\amoCRM\Client;
 use App\Services\amoCRM\Models\Notes;
 use App\Services\SmsHelper;
