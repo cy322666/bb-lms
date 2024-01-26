@@ -2,7 +2,7 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="81.163.27.155" id="d61cf042-cdfd-4f7d-bb32-1dc9b8367ea3" keyPath="$USER_HOME$/Desktop/known_hosts" port="22" customName="bb-lms" nameFormat="CUSTOM" username="root" useOpenSSHConfig="true">
+      <sshConfig host="81.163.27.155" id="d61cf042-cdfd-4f7d-bb32-1dc9b8367ea3" keyPath="$USER_HOME$/Documents/bb-lms_known_hosts" port="22" customName="bb-lms" nameFormat="CUSTOM" username="root" useOpenSSHConfig="true">
         <option name="customName" value="bb-lms" />
       </sshConfig>
     </configs>

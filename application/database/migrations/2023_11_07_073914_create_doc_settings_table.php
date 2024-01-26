@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('target_login')->nullable();
             $table->string('target_pass')->nullable();
             $table->string('target_sender')->nullable();
+            $table->string('target_sender')->nullable();
             $table->integer('account_id')->nullable();
             $table->string('subdomain')->nullable();
             $table->string('text_sms', 500)->nullable();

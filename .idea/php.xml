@@ -119,6 +119,8 @@
       <path value="$PROJECT_DIR$/application/vendor/laravel/octane" />
       <path value="$PROJECT_DIR$/application/vendor/composer" />
       <path value="$PROJECT_DIR$/application/vendor/ufee/amoapi" />
+      <path value="$PROJECT_DIR$/application/vendor/cooperav/sms-aero-v2-laravel" />
+      <path value="$PROJECT_DIR$/application/vendor/carbonphp/carbon-doctrine-types" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

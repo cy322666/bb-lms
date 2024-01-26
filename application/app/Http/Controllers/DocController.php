@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Core\Account;
 use App\Services\amoCRM\Client;
 use App\Services\amoCRM\Models\Notes;
+use App\Services\SmsHelper;
 use App\Services\TargetSMS;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,50 +13,31 @@ use Illuminate\Support\Facades\Log;
 
 class DocController extends Controller
 {
-    //push sms
     /**
      * @throws Exception
      */
-    public function agreement(Request $request)
+    public function agreement(Account $account, Request $request)
     {
-        Log::info(__METHOD__, $request->toArray());
-
-        $authCode = new TargetSMS(
-            env('TARGET_LOGIN'),
-            env('TARGET_PASSWORD')
-        );
-
-        $account = Account::query()->first();
-
-        $amoApi = (new Client($account))->init();
-
-        $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
-
-        $contact = $lead->contact;
-
-        $phone = $contact->cf('Телефон')->getValue();
-
-        $text = 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: {код}. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. Cайт https://bangbangeducation.ru';
-
         try {
-            $result = $authCode->generateCode(
-                $phone,
-                env('TARGET_SENDER'),
-                4,
-                $text,//setting->text
-            );
+            Log::info(__METHOD__, $request->toArray());
 
-            $values = TargetSMS::parsingResponse($result);
+            $setting = $account->docSetting;
 
-            $code   = $values[1]['attributes']['CODE'];
-            $idSms  = $values[1]['attributes']['ID_SMS'];
-            $status = $values[1]['attributes']['STATUS'];
+            $smsClient = SmsHelper::matchClient($account);
 
-            Log::info(__METHOD__, [
-                'code' => $code,
-                'id_sms' => $idSms,
-                'status' => $status,
-            ]);
+            $amoApi = (new Client($account))->init();
+
+            $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
+
+            $contact = $lead->contact;
+
+            $phone = $contact->cf('Телефон')->getValue();
+
+            $text = SmsHelper::getText($account->subdomain, $lead);
+
+            $code = SmsHelper::generateCode();
+
+            $response = SmsHelper::send($account->subdomain, $smsClient, $phone, $text);
 
             $account->doc()->create([
                 'id_sms'  => $idSms,
@@ -68,7 +50,7 @@ class DocController extends Controller
 
             Notes::addOne($lead, $text);
 
-            $lead->status_id = 59740474; //код отправлен //setting->
+            $lead->status_id = $setting->status_id_confirm;//59740474; //код отправлен //
             $lead->cf('Договор. Код')->setValue($code);
             $lead->save();
 
@@ -81,7 +63,7 @@ class DocController extends Controller
     }
 
     //update new info to doc (lead)
-    public function info(Request $request)
+    public function info(Account $account, Request $request)
     {
 
     }
@@ -91,7 +73,7 @@ class DocController extends Controller
     /**
      * @throws Exception
      */
-    public function check(Request $request)
+    public function check(Account $account, Request $request)
     {
         Log::info(__METHOD__, $request->toArray());
 
