@@ -52,8 +52,6 @@ class DocController extends Controller
     {
         Log::info(__METHOD__, $request->toArray());
 
-        $account = Account::query()->first();
-
         $amoApi = (new Client($account))->init();
 
         $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);

@@ -32,6 +32,7 @@ class SMSSend extends Command
     public function handle()
     {
         try {
+
             $account = Account::find($this->argument('account'));
 
             $doc = Doc::find($this->argument('doc'));
