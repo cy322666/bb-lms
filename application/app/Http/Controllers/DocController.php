@@ -26,6 +26,7 @@ class DocController extends Controller
 //            'status'  => $status,
 //            'phone'   => $phone,
             'lead_id' => $request->toArray()['leads']['status'][0]['id'],
+            'subdomain' => $account->subdomain,
 //            'contact_id' => $contact->id,
 //            'send_code'  => $code,
         ]);
@@ -58,6 +59,7 @@ class DocController extends Controller
         $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
 
         $doc = $account->doc()
+            ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
             ->first();
 

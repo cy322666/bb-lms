@@ -15,7 +15,7 @@ class Client
     public Oauthapi $service;
     public EloquentStorage $storage;
     public Account $account;
-    public User $user;
+//    public User $user;
 
     public bool $auth = false;
     public bool $logs = false;
@@ -25,7 +25,7 @@ class Client
      */
     public function __construct($account)
     {
-        $this->user = $account->user;
+//        $this->user = $account->user;
 
         $this->storage = new EloquentStorage([
             'domain'    => $account->subdomain ?? null,
@@ -87,8 +87,6 @@ class Client
 
             $oauth = $this->service->refreshAccessToken($this->storage->model->refresh_token);
 
-            Log::channel('tokens')->info('refresh user : '.$this->user->email, $oauth);
-
         } else
             $oauth = $this->service->fetchAccessToken($this->storage->model->code);
 
@@ -111,60 +109,4 @@ class Client
 
         return $this;
     }
-
-    public function initLogs(bool $debug = true): Client
-    {
-        if (!$debug) return $this;
-
-        $this->service->queries->onResponseCode(429, function(QueryModel $query) {
-
-            $this->user->amocrm_logs()->create([
-                'code' => 429,
-                'url'  => static::trimUrl($query->getUrl()),
-                'method'  => $query->method,
-                'details' => json_encode($query->toArray()),
-            ]);
-        });
-
-        $this->service->queries->listen(
-        /**
-         * @param QueryModel $query
-         * @return void
-         */
-        function(QueryModel $query) {
-
-            $log =  $this->user
-                ->amocrm_logs()
-                ->create([
-                    'code'  => $query->response->getCode(),
-                    'url'   => $query->toArray()['url'] ?? '',
-                    'start' => $query->startDate(),
-                    'end'   => $query->endDate(),
-                    'method'  => $query->method,
-                    'details' => json_encode($query->toArray()),
-
-                    'args' => json_encode($query->toArray()['args']) ?? null,
-                    'body' => json_encode($query->toArray()['post_data']) ?? null,
-                    'retries' => $query->toArray()['retries'] ?? null,
-                    'memory_usage' => $query->toArray()['memory_usage'] ?? null,
-                    'execution_time' => $query->toArray()['execution_time'] ?? null,
-                ]);
-
-            if ($query->response->getCode() === 0) {
-
-                $log->error = $query->response->getError();
-            } else
-                $log->data = strlen($query->response->getData() > 1) ? $query->response->getData() : [];
-
-            $log->save();
-        });
-
-        return $this;
-    }
-
-    private static function trimUrl(string $url): string
-    {
-        return strlen($url) > 250 ? mb_strimwidth($url, 0, 200, "...") : $url;
-    }
-
 }

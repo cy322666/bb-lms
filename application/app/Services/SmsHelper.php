@@ -52,7 +52,11 @@ class SmsHelper
     {
         if ($subdomain == 'fashionfactoryschool') {
 
-            return $client->send($phone, $sms, 'DIRECT');
+            $response = $client->send($phone, $sms, 'DIRECT');
+
+            return [
+                'status' => $response['success']
+            ];
         }
 
         if ($subdomain == 'bbeducation') {
@@ -64,5 +68,13 @@ class SmsHelper
 //            $idSms  = $values[1]['attributes']['ID_SMS'];
 //            $status = $values[1]['attributes']['STATUS'];
         }
+    }
+
+    public static function matchStatus($subdomain): int
+    {
+        return match ($subdomain) {
+            'bbeducation' => 59740474,
+            'fashionfactoryschool' => 63581333,
+        };
     }
 }

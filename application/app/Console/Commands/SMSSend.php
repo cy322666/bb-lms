@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Account;
+use App\Models\Doc;
 use App\Services\amoCRM\Client;
 use App\Services\amoCRM\Models\Notes;
 use App\Services\SmsHelper;
@@ -30,11 +32,9 @@ class SMSSend extends Command
     public function handle()
     {
         try {
-            $account = $this->argument('account');
+            $account = Account::find($this->argument('account'));
 
-            $doc = $this->argument('doc');
-
-            $setting = $account->docSetting;
+            $doc = Doc::find($this->argument('doc'));
 
             $smsClient = SmsHelper::matchClient($account);
 
@@ -52,19 +52,25 @@ class SMSSend extends Command
 
             $response = SmsHelper::send($account->subdomain, $smsClient, $phone, $text);
 
-            dd($response);
-
             Notes::addOne($lead, $text);
 
-            $lead->status_id = $setting->status_id_confirm;//59740474; //код отправлен //
+            $doc->send_code = $code;
+            $doc->phone = $phone;
+            $doc->email = $contact->cf('Email')->getValue();
+            $doc->status = $response['status'];
+            $doc->contact_id = $contact->id;
+            $doc->save();
+
+            $lead->status_id = SmsHelper::matchStatus($account->subdomain);
             $lead->cf('Договор. Код')->setValue($code);
             $lead->save();
 
         } catch (\Throwable $e) {
 
-            Log::error(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getFile());
+            Log::error(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
 
-            Notes::addOne($lead, 'При отправке или обработке смс возникла ошибка');
+            if (!empty($lead))
+                Notes::addOne($lead, 'При отправке или обработке смс возникла ошибка');
         }
     }
 }
