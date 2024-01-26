@@ -16,5 +16,9 @@ class Doc extends Model
         'lead_id',
         'contact_id',
         'send_code',
+        'get_code',
+        'email',
+        'uuid',
+        'subdomain',
     ];
 }
