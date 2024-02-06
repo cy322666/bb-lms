@@ -60,7 +60,7 @@ class DocController extends Controller
             ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
             ->latest('id')
-            ->get();
+            ->first();
 
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
         $doc->is_agreement = $doc->get_code == $doc->send_code;
