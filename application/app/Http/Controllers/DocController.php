@@ -67,7 +67,7 @@ class DocController extends Controller
 
         if ($doc->is_agreement) {
 
-            $lead->status_id = 142;
+            $lead->status_id = SmsHelper::matchStatus($account->subdomain);
             $lead->save();
 
             Notes::addOne($lead, 'Коды подтверждения совпадают : '.$doc->send_code.' > '.$doc->get_code);

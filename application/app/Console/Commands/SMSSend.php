@@ -62,7 +62,6 @@ class SMSSend extends Command
             $doc->contact_id = $contact->id;
             $doc->save();
 
-            $lead->status_id = SmsHelper::matchStatus($account->subdomain);
             $lead->cf('Договор. Код')->setValue($code);
             $lead->save();
 
