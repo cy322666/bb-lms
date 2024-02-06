@@ -59,7 +59,8 @@ class DocController extends Controller
         $doc = $account->doc()
             ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
-            ->first();
+            ->latest('id')
+            ->get();
 
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
         $doc->is_agreement = $doc->get_code == $doc->send_code;
