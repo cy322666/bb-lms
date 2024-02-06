@@ -33,9 +33,9 @@ class SMSSend extends Command
     {
         try {
 
-            $account = Account::find($this->argument('account'));
+            $account = Account::find($this->argument('account'))->first();
 
-            $doc = Doc::find($this->argument('doc'));
+            $doc = Doc::find($this->argument('doc'))->first();
 
             $smsClient = SmsHelper::matchClient($account);
 
