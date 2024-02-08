@@ -43,6 +43,11 @@ class DocController extends Controller
 
     }
 
+    public function generate(Account $account, Request $request)
+    {
+
+    }
+
     //check sms code from client
 
     /**

@@ -42,10 +42,8 @@ class SmsHelper
         return $tokens[$subdomain];
     }
 
-    public static function getText($subdomain, $lead): string
+    public static function getText($subdomain, $lead, $code): string
     {
-        $code = static::generateCode();
-
         return match ($subdomain) {
             'bbeducation' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. Cайт https://bangbangeducation.ru',
             'fashionfactoryschool' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт https://bangbangeducation.ru',
@@ -94,7 +92,7 @@ class SmsHelper
     {
         return match ($subdomain) {
             'bbeducation' => 59740474,
-            'fashionfactoryschool' => 63581333,
+            'fashionfactoryschool' => 63581337,
             'maed' => '',//TODO
         };
     }
