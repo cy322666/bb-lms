@@ -80,7 +80,7 @@ class SmsHelper
 
             $response = new Sms($phone, $sms);
 
-            $client->smsStatus($response->ids[0]);
+            $client->smsStatus($response->ids[0] ?? null);
 
             return [
                 'status' => $response['success'] //TODO
