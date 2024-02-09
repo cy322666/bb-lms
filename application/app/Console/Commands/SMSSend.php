@@ -33,9 +33,9 @@ class SMSSend extends Command
     {
         try {
 
-            $account = Account::find($this->argument('account'))->first();
+            $account = $this->argument('account');
 
-            $doc = Doc::find($this->argument('doc'))->first();
+            $doc = $this->argument('doc');
 
             $smsClient = SmsHelper::matchClient($account);
 
@@ -49,17 +49,19 @@ class SMSSend extends Command
 
             $code = SmsHelper::generateCode();
 
+            $doc->send_code = $code;
+            $doc->phone = $phone;
+            $doc->email = $contact->cf('Email')->getValue();
+            $doc->contact_id = $contact->id;
+            $doc->save();
+
             $text = SmsHelper::getText($account->subdomain, $lead, $code);
 
             $response = SmsHelper::send($account->subdomain, $smsClient, $phone, $text);
 
             Notes::addOne($lead, $text);
 
-            $doc->send_code = $code;
-            $doc->phone = $phone;
-            $doc->email = $contact->cf('Email')->getValue();
             $doc->status = $response['status'];
-            $doc->contact_id = $contact->id;
             $doc->save();
 
             $lead->cf('Договор. Код')->setValue($code);
