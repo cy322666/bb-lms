@@ -83,7 +83,7 @@ class SmsHelper
             $client->smsStatus($response->ids[0] ?? null);
 
             return [
-                'status' => $response['success'] //TODO
+                'status' => $response['success'] ?? $response //TODO
             ];
         }
     }
