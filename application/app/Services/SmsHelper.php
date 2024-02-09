@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Core\Account;
 use CooperAV\SmsAero\SmsAero;
+use Illuminate\Support\Facades\Log;
 use Zelenin\SmsRu\Api;
 use Zelenin\SmsRu\Auth\ApiIdAuth;
 use Zelenin\SmsRu\Client\Client;
@@ -79,6 +80,8 @@ class SmsHelper
           if ($subdomain == 'maed') {
 
             $response = new Sms($phone, $sms);
+
+            Log::alert(__METHOD__, [$response]);
 
             $client->smsStatus($response->ids[0] ?? null);
 
