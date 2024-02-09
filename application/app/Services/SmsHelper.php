@@ -11,7 +11,7 @@ use Zelenin\SmsRu\Entity\Sms;
 
 class SmsHelper
 {
-    public static function matchClient($account): SmsAero|TargetSMS
+    public static function matchClient($account): SmsAero|TargetSMS|Api
     {
         $access = static::getClient($account->subdomain);
 
