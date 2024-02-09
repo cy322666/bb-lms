@@ -47,9 +47,9 @@ class SMSSend extends Command
 
             $phone = $contact->cf('Телефон')->getValue();
 
-            $text = SmsHelper::getText($account->subdomain, $lead, $code);
-
             $code = SmsHelper::generateCode();
+
+            $text = SmsHelper::getText($account->subdomain, $lead, $code);
 
             $response = SmsHelper::send($account->subdomain, $smsClient, $phone, $text);
 
