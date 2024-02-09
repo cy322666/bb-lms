@@ -79,14 +79,16 @@ class SmsHelper
         }
           if ($subdomain == 'maed') {
 
-            $response = new Sms($phone, $sms);
+            $sms = new Sms($phone, $sms);
+
+            $response = $client->smsSend($sms);
 
             Log::alert(__METHOD__, [$response]);
 
-            $client->smsStatus($response->ids[0] ?? null);
+            $client->smsStatus($response->ids[0]);
 
             return [
-                'status' => $response['success'] ?? $response //TODO
+                'status' => $response['success'] //TODO
             ];
         }
     }
