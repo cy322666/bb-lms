@@ -25,12 +25,11 @@ class TargetSMS
      * Генерация кода авторизации
      * @param string $phone номер телефона получателя
      * @param string $sender подпись отправителя
-     * @param integer $len длина кода
      * @param string $text текст персонификации
      * @return array
      * @throws Exception
      */
-    public function generateCode(string $phone, string $sender, int $len = 4, string $text = ''): array
+    public function generateCode(string $phone, string $sender, string $text = ''): array
     {
         $xml = '<?xml version="1.0" encoding="utf-8"?>
                 <request>
@@ -40,7 +39,6 @@ class TargetSMS
                  </security>
                  <phone>'.$phone.'</phone>
                  <sender>'.$sender.'</sender>
-                 <random_string_len>'.$len.'</random_string_len>
                  <text>'.$text.'</text>
                 </request>';
         return $this->send($xml);
@@ -48,6 +46,7 @@ class TargetSMS
 
     /**
      * Отправка xml на сервер
+     * @param $data
      * @return array
      * @throws Exception
      */

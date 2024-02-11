@@ -17,8 +17,10 @@ class SmsHelper
         $access = static::getClient($account->subdomain);
 
         return match ($account->subdomain) {
-            'bbeducation' => new TargetSMS($access['login'], $access['pass']),
+            'bbeducation', 'bclawyers' => new TargetSMS($access['login'], $access['pass']),
+
             'fashionfactoryschool' => new SmsAero($access['login'],$access['api_key']),
+
             'maed' => new Api(new ApiIdAuth($access['api_key']), new Client()),
         };
     }
@@ -38,6 +40,10 @@ class SmsHelper
                 'login'   => env('MAED_LOGIN'),
                 'api_key' => env('MAED_APIKEY'),
             ],
+            'bclawyers' => [
+                'login' => env('MDS_LOGIN'),
+                'pass'  => env('MDS_PASS'),
+            ],
         ];
 
         return $tokens[$subdomain];
@@ -47,8 +53,7 @@ class SmsHelper
     {
         return match ($subdomain) {
             'bbeducation' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. Cайт https://bangbangeducation.ru',
-            'fashionfactoryschool' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт https://bangbangeducation.ru',
-            'maed' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт
+            'fashionfactoryschool', 'maed', 'bclawyers' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт https://bangbangeducation.ru',
         };
     }
 
@@ -68,16 +73,23 @@ class SmsHelper
             ];
         }
 
-        if ($subdomain == 'bbeducation') {
+        if ($subdomain == 'bbeducation' || $subdomain = 'bclawyers') {
 
-            //TODO
-//            $values = TargetSMS::parsingResponse($result);
-//
-//            $code   = $values[1]['attributes']['CODE'];
-//            $idSms  = $values[1]['attributes']['ID_SMS'];
-//            $status = $values[1]['attributes']['STATUS'];
+            $result = $client->generateCode(
+                $phone,
+                $subdomain == 'bbeducation' ? env('BBE_SENDER') : env('MDS_SENDER'),
+                $sms,
+            );
+
+            $vals = TargetSMS::parsingResponse($result);
+
+            Log::info(__METHOD__, [$vals]);
+
+            return [
+                'status' => $vals[1]['attributes']['STATUS']
+            ];
         }
-          if ($subdomain == 'maed') {
+        if ($subdomain == 'maed') {
 
             $sms = new Sms($phone, $sms);
 
@@ -85,11 +97,16 @@ class SmsHelper
 
             Log::alert(__METHOD__, [$response]);
 
-            $client->smsStatus($response->ids[0]);
+            $client->smsStatus($response->ids[0] ?? null);
 
             return [
                 'status' => $response['success'] //TODO
             ];
+        }
+
+        if ($subdomain == 'bclawyers') {
+
+
         }
     }
 
@@ -98,7 +115,7 @@ class SmsHelper
         return match ($subdomain) {
             'bbeducation' => 59740474,
             'fashionfactoryschool' => 63581337,
-            'maed' => '',//TODO
+            'maed' => 63649681,
         };
     }
 }
