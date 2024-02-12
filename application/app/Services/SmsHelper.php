@@ -62,7 +62,7 @@ class SmsHelper
         return rand(1000, 9999);
     }
 
-    public static function send(string $subdomain, $client, int $phone, string $sms)
+    public static function send(string $subdomain, $client, string $phone, string $sms)
     {
         if ($subdomain == 'fashionfactoryschool') {
 
