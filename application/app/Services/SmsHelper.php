@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Core\Account;
+use App\Services\amoCRM\Models\Contacts;
+use App\Services\Sms\Xml\Messages;
 use CooperAV\SmsAero\SmsAero;
 use Illuminate\Support\Facades\Log;
 use Zelenin\SmsRu\Api;
@@ -75,18 +77,30 @@ class SmsHelper
 
         if ($subdomain == 'bbeducation' || $subdomain = 'bclawyers') {
 
-            $result = $client->generateCode(
-                $phone,
-                $subdomain == 'bbeducation' ? env('BBE_SENDER') : env('MDS_SENDER'),
-                $sms,
-            );
+            if ($subdomain == 'bbeducation') {
 
-            $vals = TargetSMS::parsingResponse($result);
+                $messages = new Messages(env('BBE_LOGIN'), env('BBE_PASS'));
+                $messages->setUrl('https://sms.targetsms.ru');
+                $mes = $messages->createNewMessage(env('BBE_SENDER'), $sms);
+            }
 
-            Log::info(__METHOD__, [$vals]);
+            if ($subdomain == 'bclawyers') {
+
+                $messages = new Messages(env('MDS_LOGIN'), env('MDS_PASS'));
+                $messages->setUrl('https://sms.targetsms.ru');
+                $mes = $messages->createNewMessage(env('MDS_SENDER'), $sms);
+            }
+
+            $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
+            $abonent->setNumberSms(1);
+            $mes->addAbonent($abonent);
+
+            $result = $messages->send();
+
+            Log::info(__METHOD__, [$result]);
 
             return [
-                'status' => $vals[1]['attributes']['STATUS']
+                'status' => $result[1]['tag'] ?? 'undefined'
             ];
         }
         if ($subdomain == 'maed') {
