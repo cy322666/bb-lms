@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Sms\Xml;
+namespace App\Services\TargetSMS;
 /**
  * @version 1.1
  */

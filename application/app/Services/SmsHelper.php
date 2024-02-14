@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Core\Account;
 use App\Services\amoCRM\Models\Contacts;
-use App\Services\Sms\Xml\Messages;
+use App\Services\TargetSMS\Messages;
 use CooperAV\SmsAero\SmsAero;
 use Illuminate\Support\Facades\Log;
 use Zelenin\SmsRu\Api;
