@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Log;
 
 class SMSSend extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:sms-send {account} {doc}';
 
     /**
@@ -33,9 +28,9 @@ class SMSSend extends Command
     {
         try {
 
-            $account = $this->argument('account');
+            $account = Account::query()->where('id', $this->argument('account'))->first();
 
-            $doc = $this->argument('doc');
+            $doc = Doc::query()->where('id', $this->argument('doc'))->first();
 
             $smsClient = SmsHelper::matchClient($account);
 
@@ -44,7 +39,6 @@ class SMSSend extends Command
             $lead = $amoApi->service->leads()->find($doc->lead_id);
 
             $contact = $lead->contact;
-
 
             if ($account->subdomain == 'fashionfactoryschool')
 
@@ -74,7 +68,7 @@ class SMSSend extends Command
 
         } catch (\Throwable $e) {
 
-            Log::error(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            dd(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
 
             if (!empty($lead))
                 Notes::addOne($lead, 'При отправке или обработке смс возникла ошибка');

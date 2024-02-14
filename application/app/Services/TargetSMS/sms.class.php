@@ -72,6 +72,7 @@ abstract class Request
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         $result = curl_exec($ch);
         curl_close($ch);
+
         $this->response = static::parseXml($result);
 
         return static::parseXml($result);

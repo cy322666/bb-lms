@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpIncludeInspection */
 
 namespace App\Services;
 
@@ -10,6 +10,8 @@ use Zelenin\SmsRu\Api;
 use Zelenin\SmsRu\Auth\ApiIdAuth;
 use Zelenin\SmsRu\Client\Client;
 use Zelenin\SmsRu\Entity\Sms;
+
+require_once 'app/Services/TargetSMS/sms.class.php';
 
 class SmsHelper
 {
@@ -89,17 +91,19 @@ class SmsHelper
                 $messages->setUrl('https://sms.targetsms.ru');
                 $mes = $messages->createNewMessage(env('MDS_SENDER'), $sms);
             }
-
+//            dd($mes->getText());
             $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
             $abonent->setNumberSms(1);
             $mes->addAbonent($abonent);
+            $messages->addMessage($mes);
+//            dd($mes);
 
             $result = $messages->send();
 
             Log::info(__METHOD__, [$result]);
 
             return [
-                'status' => $result[1]['tag'] ?? 'undefined'
+                'status' => $result[0]['value'] == 'send'
             ];
         }
 
