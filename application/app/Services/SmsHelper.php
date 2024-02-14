@@ -130,6 +130,7 @@ class SmsHelper
             'bbeducation' => 59740474,
             'fashionfactoryschool' => 63581337,
             'maed' => 63649681,
+            'bclawyers' => 63843810,
         };
     }
 }
