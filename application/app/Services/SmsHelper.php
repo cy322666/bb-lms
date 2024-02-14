@@ -103,6 +103,7 @@ class SmsHelper
                 'status' => $result[1]['tag'] ?? 'undefined'
             ];
         }
+
         if ($subdomain == 'maed') {
 
             $sms = new Sms($phone, $sms);
@@ -116,11 +117,6 @@ class SmsHelper
             return [
                 'status' => $response['success'] //TODO
             ];
-        }
-
-        if ($subdomain == 'bclawyers') {
-
-
         }
     }
 
