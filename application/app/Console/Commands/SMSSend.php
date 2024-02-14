@@ -28,9 +28,9 @@ class SMSSend extends Command
     {
         try {
 
-            $account = Account::query()->where('id', $this->argument('account'))->first();
+            $account = $this->argument('account');
 
-            $doc = Doc::query()->where('id', $this->argument('doc'))->first();
+            $doc = $this->argument('doc');
 
             $smsClient = SmsHelper::matchClient($account);
 
