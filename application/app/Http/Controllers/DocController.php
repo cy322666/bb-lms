@@ -32,8 +32,8 @@ class DocController extends Controller
         ]);
 
         Artisan::call('app:sms-send', [
-            'account' => $account,
-            'doc' => $doc,
+            'account' => $account->id,
+            'doc' => $doc->id,
         ]);
     }
 

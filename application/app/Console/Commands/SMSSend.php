@@ -28,9 +28,9 @@ class SMSSend extends Command
     {
         try {
 
-            $account = $this->argument('account');
+            $account = Account::query()->find($this->argument('account'));
 
-            $doc = $this->argument('doc');
+            $doc = Doc::query()->find($this->argument('doc'));
 
             $smsClient = SmsHelper::matchClient($account);
 
@@ -40,10 +40,22 @@ class SMSSend extends Command
 
             $contact = $lead->contact;
 
-            if ($account->subdomain == 'fashionfactoryschool')
+            if ($account->subdomain == 'fashionfactoryschool') {
 
-                $phone = $contact->cf('Телефон', 'MOB')->getValue();
-            else
+                $arrayContactCF = $contact->toArray()['custom_fields'];
+
+                $phones = $arrayContactCF[122752];
+
+                foreach ($phones->values as $phoneDetail) {
+
+                    if ($phoneDetail->enum == 282376) {
+
+                        $phone = $phoneDetail->value;
+
+                        break;
+                    }
+                }
+            } else
                 $phone = $contact->cf('Телефон')->getValue();
 
             $code = SmsHelper::generateCode();
