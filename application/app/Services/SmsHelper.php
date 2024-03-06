@@ -20,11 +20,9 @@ class SmsHelper
         $access = static::getClient($account->subdomain);
 
         return match ($account->subdomain) {
-            'bbeducation', 'bclawyers' => new TargetSMS($access['login'], $access['pass']),
+            'bbeducation', 'bclawyers', 'maed' => new TargetSMS($access['login'], $access['pass']),
 
             'fashionfactoryschool' => new SmsAero($access['login'],$access['api_key']),
-
-            'maed' => new Api(new ApiIdAuth($access['api_key']), new Client()),
         };
     }
 
@@ -41,7 +39,7 @@ class SmsHelper
             ],
             'maed' => [
                 'login'   => env('MAED_LOGIN'),
-                'api_key' => env('MAED_APIKEY'),
+                'api_key' => env('MAED_PASS'),
             ],
             'bclawyers' => [
                 'login' => env('MDS_LOGIN'),
@@ -91,6 +89,14 @@ class SmsHelper
                 $messages->setUrl('https://sms.targetsms.ru');
                 $mes = $messages->createNewMessage(env('MDS_SENDER'), $sms);
             }
+
+            if ($subdomain == 'bclawyers') {
+
+                $messages = new Messages(env('MAED_LOGIN'), env('MAED_PASS'));
+                $messages->setUrl('https://sms.targetsms.ru');
+                $mes = $messages->createNewMessage(env('MAED_SENDER'), $sms);
+            }
+
 //            dd($mes->getText());
             $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
             $abonent->setNumberSms(1);
@@ -104,21 +110,6 @@ class SmsHelper
 
             return [
                 'status' => $result[0]['value'] == 'send'
-            ];
-        }
-
-        if ($subdomain == 'maed') {
-
-            $sms = new Sms($phone, $sms);
-
-            $response = $client->smsSend($sms);
-
-            Log::alert(__METHOD__, [$response]);
-
-            $client->smsStatus($response->ids[0] ?? null);
-
-            return [
-                'status' => $response['success'] //TODO
             ];
         }
     }
