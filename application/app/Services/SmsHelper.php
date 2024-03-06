@@ -11,7 +11,7 @@ use Zelenin\SmsRu\Auth\ApiIdAuth;
 use Zelenin\SmsRu\Client\Client;
 use Zelenin\SmsRu\Entity\Sms;
 
-require_once 'app/Services/TargetSMS/sms.class.php';
+//require_once 'app/Services/TargetSMS/sms.class.php';
 
 class SmsHelper
 {
@@ -38,8 +38,8 @@ class SmsHelper
                 'api_key' => env('FF_API_KEY'),
             ],
             'maed' => [
-                'login'   => env('MAED_LOGIN'),
-                'api_key' => env('MAED_PASS'),
+                'login' => env('MAED_LOGIN'),
+                'pass'  => env('MAED_PASS'),
             ],
             'bclawyers' => [
                 'login' => env('MDS_LOGIN'),
