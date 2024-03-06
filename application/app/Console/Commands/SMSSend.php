@@ -80,7 +80,7 @@ class SMSSend extends Command
 
         } catch (\Throwable $e) {
 
-//            dd(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            Log::error(__METHOD__.' '.$e->getMessage().' '.$e->getFile().' '.$e->getLine());
 
             if (!empty($lead))
                 Notes::addOne($lead, 'При отправке или обработке смс возникла ошибка');
