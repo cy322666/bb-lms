@@ -74,7 +74,9 @@ class SmsHelper
             ];
         }
 
-        if ($subdomain == 'bbeducation' || $subdomain = 'bclawyers') {
+        if ($subdomain == 'bbeducation' ||
+            $subdomain = 'bclawyers' ||
+            $subdomain = 'maed') {
 
             if ($subdomain == 'bbeducation') {
 
@@ -90,7 +92,7 @@ class SmsHelper
                 $mes = $messages->createNewMessage(env('MDS_SENDER'), $sms);
             }
 
-            if ($subdomain == 'bclawyers') {
+            if ($subdomain == 'maed') {
 
                 $messages = new Messages(env('MAED_LOGIN'), env('MAED_PASS'));
                 $messages->setUrl('https://sms.targetsms.ru');
