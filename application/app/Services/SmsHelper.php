@@ -80,33 +80,29 @@ class SmsHelper
 
             if ($subdomain == 'bbeducation') {
 
-                $messages = new Messages(env('BBE_LOGIN'), env('BBE_PASS'));
-                $messages->setUrl('https://sms.targetsms.ru');
-                $mes = $messages->createNewMessage(env('BBE_SENDER'), $sms);
+//                $messages = new Messages(env('BBE_LOGIN'), env('BBE_PASS'));
+//                $messages->setUrl('https://sms.targetsms.ru');
+                $result = $client->sendSMS($phone, env('BBE_SENDER'), $sms);
             }
 
             if ($subdomain == 'bclawyers') {
 
-                $messages = new Messages(env('MDS_LOGIN'), env('MDS_PASS'));
-                $messages->setUrl('https://sms.targetsms.ru');
-                $mes = $messages->createNewMessage(env('MDS_SENDER'), $sms);
+                $result = $client->sendSMS($phone, env('MDS_SENDER'), $sms);
             }
 
             if ($subdomain == 'maed') {
 
-                $messages = new Messages(env('MAED_LOGIN'), env('MAED_PASS'));
-                $messages->setUrl('https://sms.targetsms.ru');
-                $mes = $messages->createNewMessage(env('MAED_SENDER'), $sms);
+                $result = $client->sendSMS($phone, env('MAED_SENDER'), $sms);
             }
 
 //            dd($mes->getText());
-            $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
-            $abonent->setNumberSms(1);
-            $mes->addAbonent($abonent);
-            $messages->addMessage($mes);
+//            $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
+//            $abonent->setNumberSms(1);
+//            $mes->addAbonent($abonent);
+//            $messages->addMessage($mes);
 //            dd($mes);
 
-            $result = $messages->send();
+//            $result = $client->send();
 
             Log::info(__METHOD__, [$result]);
 

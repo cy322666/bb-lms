@@ -29,7 +29,7 @@ class TargetSMS
      * @return array
      * @throws Exception
      */
-    public function generateCode(string $phone, string $sender, string $text = ''): array
+    public function sendSMS(string $phone, string $sender, string $text = ''): array
     {
         $xml = '<?xml version="1.0" encoding="utf-8"?>
                 <request>
