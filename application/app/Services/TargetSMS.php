@@ -7,7 +7,7 @@ use Exception;
 class TargetSMS
 {
 
-    private string $apiurl = 'https://apiagent.ru/password_generation/api.php';
+    private string $apiurl = 'https://sms.targetsms.ru/xml/';//https://apiagent.ru/password_generation/api.php';
 
     /**
      * Создание подключения.
