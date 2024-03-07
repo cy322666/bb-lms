@@ -75,34 +75,20 @@ class SmsHelper
         }
 
         if ($subdomain == 'bbeducation' ||
-            $subdomain = 'bclawyers' ||
-            $subdomain = 'maed') {
+            $subdomain == 'bclawyers' ||
+            $subdomain == 'maed') {
 
-            if ($subdomain == 'bbeducation') {
+            if ($subdomain == 'bbeducation')
 
-//                $messages = new Messages(env('BBE_LOGIN'), env('BBE_PASS'));
-//                $messages->setUrl('https://sms.targetsms.ru');
                 $result = $client->sendSMS($phone, env('BBE_SENDER'), $sms);
-            }
 
-            if ($subdomain == 'bclawyers') {
+            if ($subdomain == 'bclawyers')
 
                 $result = $client->sendSMS($phone, env('MDS_SENDER'), $sms);
-            }
 
-            if ($subdomain == 'maed') {
+            if ($subdomain == 'maed')
 
                 $result = $client->sendSMS($phone, env('MAED_SENDER'), $sms);
-            }
-
-//            dd($mes->getText());
-//            $abonent = $mes->createAbonent(Contacts::clearPhone($phone));
-//            $abonent->setNumberSms(1);
-//            $mes->addAbonent($abonent);
-//            $messages->addMessage($mes);
-//            dd($mes);
-
-//            $result = $client->send();
 
             Log::info(__METHOD__, [$result]);
 
