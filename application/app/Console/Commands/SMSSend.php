@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Account;
 use App\Models\Doc;
 use App\Services\amoCRM\Client;
+use App\Services\amoCRM\Models\Contacts;
 use App\Services\amoCRM\Models\Notes;
 use App\Services\SmsHelper;
 use Illuminate\Console\Command;
@@ -61,7 +62,7 @@ class SMSSend extends Command
             $code = SmsHelper::generateCode();
 
             $doc->send_code = $code;
-            $doc->phone = $phone;
+            $doc->phone = Contacts::clearPhone($phone);
             $doc->email = $contact->cf('Email')->getValue();
             $doc->contact_id = $contact->id;
             $doc->save();
