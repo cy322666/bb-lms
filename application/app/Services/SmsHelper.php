@@ -93,7 +93,7 @@ class SmsHelper
             Log::info(__METHOD__, [$result]);
 
             return [
-                'status' => $result->info->http_code == 200
+                'status' => $result['info']['http_code'] == 200
             ];
         }
     }
