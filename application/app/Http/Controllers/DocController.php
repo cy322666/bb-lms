@@ -23,7 +23,8 @@ class DocController extends Controller
 
         $doc = $account->doc()
             ->where('lead_id', $request->toArray()['leads']['status'][0]['id'])
-            ->where('is_agreement', true)
+            ->where('is_agreement', false)
+            ->latest('id')
             ->first();
 
         if (!$doc) {
