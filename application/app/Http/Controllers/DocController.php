@@ -43,7 +43,11 @@ class DocController extends Controller
                 'account' => $account->id,
                 'doc' => $doc->id,
             ]);
-        }
+        } else
+            Artisan::call('app:sms-send', [
+                'account' => $account->id,
+                'doc' => $doc->id,
+            ]);
     }
 
     //update new info to doc (lead)
