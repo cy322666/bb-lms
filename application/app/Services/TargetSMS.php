@@ -9,6 +9,9 @@ class TargetSMS
 
     private string $apiurl = 'https://sms.targetsms.ru/xml/';//https://apiagent.ru/password_generation/api.php';
 
+    public string $login;
+    public string $password;
+
     /**
      * Создание подключения.
      *
@@ -33,13 +36,15 @@ class TargetSMS
     {
         $xml = '<?xml version="1.0" encoding="utf-8"?>
                 <request>
-                 <security>
-                     <login>'.$this->login.'</login>
-                     <password>'.$this->password.'</password>
-                 </security>
-                 <phone>'.$phone.'</phone>
-                 <sender>'.$sender.'</sender>
-                 <text>'.$text.'</text>
+                     <security>
+                            <login value="'.$this->login.'"/>
+                            <password value="'.$this->password.'"/>
+                     </security>
+                     <message type="sms">
+                         <phone>'.$phone.'</phone>
+                         <sender>'.$sender.'</sender>
+                         <text>'.$text.'</text>
+                    </message>
                 </request>';
         return $this->send($xml);
     }
