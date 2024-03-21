@@ -90,7 +90,7 @@ class SmsHelper
 
                 $result = $client->sendSMS($phone, env('MAED_SENDER'), $sms);
 
-            Log::info(__METHOD__, [$result]);
+            Log::info(__METHOD__.' '.$subdomain, [$result ?? []]);
 
             return [
                 'status' => $result['info']['http_code'] == 200

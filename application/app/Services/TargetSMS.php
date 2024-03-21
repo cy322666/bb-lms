@@ -41,7 +41,7 @@ class TargetSMS
                             <password value="'.$this->password.'"/>
                      </security>
                      <message type="sms">
-                         <phone>'.$phone.'</phone>
+                         <abonent phone="'.$phone.'" number_sms="1" />
                          <sender>'.$sender.'</sender>
                          <text>'.$text.'</text>
                     </message>

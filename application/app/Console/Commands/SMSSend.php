@@ -41,6 +41,13 @@ class SMSSend extends Command
 
             $contact = $lead->contact;
 
+            if (!$contact) {
+
+                Notes::addOne($lead, 'Не найден контакт для отправки');
+
+                return;
+            }
+
             if ($account->subdomain == 'fashionfactoryschool') {
 
                 $arrayContactCF = $contact->toArray()['custom_fields'];
