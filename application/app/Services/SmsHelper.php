@@ -115,7 +115,7 @@ class SmsHelper
             'fashionfactoryschool' => 63581337,
             'maed' => 63649681,
             'bclawyers' => 63843810,
-            'psychodemiaru' => 65576006,
+            'psychodemiaru' => 65576010,
         };
     }
 }
