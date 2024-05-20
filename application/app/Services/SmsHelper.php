@@ -20,7 +20,7 @@ class SmsHelper
         $access = static::getClient($account->subdomain);
 
         return match ($account->subdomain) {
-            'bbeducation', 'bclawyers', 'maed', 'psychodemiaru' => new TargetSMS($access['login'], $access['pass']),
+            'bbeducation', 'bclawyers', 'maed', 'psychodemiaru', 'mymiin' => new TargetSMS($access['login'], $access['pass']),
 
             'fashionfactoryschool' => new SmsAero($access['login'],$access['api_key']),
         };
@@ -49,6 +49,11 @@ class SmsHelper
                 'login' => env('PSY_LOGIN'),
                 'pass'  => env('PSY_PASS'),
             ],
+
+            'mymiin' => [
+                'login' => env('MIIN_LOGIN'),
+                'pass'  => env('MIIN_PASS'),
+            ],
         ];
 
         return $tokens[$subdomain];
@@ -58,7 +63,7 @@ class SmsHelper
     {
         return match ($subdomain) {
             'bbeducation' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. Cайт https://bangbangeducation.ru',
-            'fashionfactoryschool', 'maed', 'bclawyers', 'psychodemiaru' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт https://bangbangeducation.ru',
+            'fashionfactoryschool', 'maed', 'bclawyers', 'psychodemiaru', 'mymiin' => 'Ознакомиться с договором на обучение можно по ссылке '.$lead->cf('Договор. Ссылка')->getValue().'. Код подтверждения: '.$code.'. Для подписания договора введите его тут '.$lead->cf('Договор. Анкета код')->getValue().'. ',//TODO Cайт https://bangbangeducation.ru',
         };
     }
 
@@ -81,6 +86,7 @@ class SmsHelper
         if ($subdomain == 'bbeducation' ||
             $subdomain == 'bclawyers' ||
             $subdomain == 'maed' ||
+            $subdomain == 'mymiin' ||
             $subdomain == 'psychodemiaru') {
 
             if ($subdomain == 'bbeducation')
@@ -99,6 +105,10 @@ class SmsHelper
 
                 $result = $client->sendSMS($phone, env('PSY_SENDER'), $sms);
 
+            if ($subdomain == 'mymiin')
+
+                $result = $client->sendSMS($phone, env('MIIN_SENDER'), $sms);
+
             Log::info(__METHOD__.' '.$subdomain, [$result ?? []]);
 
             return [
@@ -116,6 +126,7 @@ class SmsHelper
             'maed' => 63649681,
             'bclawyers' => 63843810,
             'psychodemiaru' => 65576010,
+            'mymiin' => 66715422,
         };
     }
 }
