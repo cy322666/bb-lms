@@ -80,6 +80,15 @@ class DocController extends Controller
             ->latest('id')
             ->first();
 
+        sleep(5);
+
+        if (!$doc) {
+
+            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator ');
+
+            exit;
+        }
+
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
         $doc->is_agreement = $doc->get_code == $doc->send_code;
         $doc->save();
