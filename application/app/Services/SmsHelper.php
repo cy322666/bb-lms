@@ -126,7 +126,7 @@ class SmsHelper
             'maed' => 63649681,
             'bclawyers' => 63843810,
             'psychodemiaru' => 65576010,
-            'mymiin' => 66715422,
+            'mymiin' => 66715426,
         };
     }
 }
