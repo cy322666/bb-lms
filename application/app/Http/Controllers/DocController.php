@@ -74,13 +74,13 @@ class DocController extends Controller
 
         $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
 
+        sleep(5);
+
         $doc = $account->doc()
             ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
             ->latest('id')
             ->first();
-
-        sleep(5);
 
         if (!$doc) {
 
