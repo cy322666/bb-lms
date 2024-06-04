@@ -30,24 +30,26 @@ class DocController extends Controller
         if (!$doc) {
 
             $doc = $account->doc()->create([
-                //            'id_sms'  => $idSms,
-                //            'status'  => $status,
-                //            'phone'   => $phone,
                 'lead_id' => $request->toArray()['leads']['status'][0]['id'],
                 'subdomain' => $account->subdomain,
-                //            'contact_id' => $contact->id,
-                //            'send_code'  => $code,
             ]);
 
             Artisan::call('app:sms-send', [
                 'account' => $account->id,
                 'doc' => $doc->id,
             ]);
-        } else
+        } else {
+
+            $doc->get_code = null;
+            $doc->status = 0;
+            $doc->is_agreement = false;
+            $doc->save();
+
             Artisan::call('app:sms-send', [
                 'account' => $account->id,
                 'doc' => $doc->id,
             ]);
+        }
     }
 
     //update new info to doc (lead)
