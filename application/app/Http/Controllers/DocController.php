@@ -76,8 +76,6 @@ class DocController extends Controller
 
         $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
 
-        sleep(5);
-
         $doc = $account->doc()
             ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
@@ -86,9 +84,9 @@ class DocController extends Controller
 
         if (!$doc) {
 
-            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator ');
+//            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator ');
 
-            exit;
+            return;
         }
 
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
