@@ -89,6 +89,8 @@ class DocController extends Controller
             return;
         }
 
+        if ($doc->send_code) return;
+
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
         $doc->is_agreement = $doc->get_code == $doc->send_code;
         $doc->save();
