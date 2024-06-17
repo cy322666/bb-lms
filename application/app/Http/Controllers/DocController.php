@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Doc;
 use App\Services\amoCRM\Client;
 use App\Services\amoCRM\Models\Notes;
 use App\Services\SmsHelper;
@@ -76,7 +77,7 @@ class DocController extends Controller
 
         $lead = $amoApi->service->leads()->find($request->toArray()['leads']['status'][0]['id']);
 
-        $doc = $account->doc()
+        $doc = Doc::query()
             ->where('is_agreement', false)
             ->where('lead_id', $lead->id)
             ->latest('id')
@@ -84,12 +85,12 @@ class DocController extends Controller
 
         if (!$doc) {
 
-//            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator ');
+            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator');
 
             return;
         }
 
-        if ($doc->send_code) return;
+        if ($doc->get_code) return;
 
         $doc->get_code = $lead->cf('Код подтверждения')->getValue();
         $doc->is_agreement = $doc->get_code == $doc->send_code;
