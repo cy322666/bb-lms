@@ -85,7 +85,14 @@ class DocController extends Controller
 
         if (!$doc) {
 
-            Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator');
+            $doc = Doc::query()
+                ->where('is_agreement', true)
+                ->where('lead_id', $lead->id)
+                ->latest('id')
+                ->first();
+
+            if (!$doc)
+                Notes::addOne($lead, 'Ошибка проверки кода, зовите @integrator');
 
             return;
         }
